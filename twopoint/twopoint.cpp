@@ -63,3 +63,20 @@ int minSubArrayLen(int target, vector<int> &nums) {
     }
     return res == INT_MAX ? 0 : res;
 }
+
+// 42 https://leetcode.cn/problems/trapping-rain-water/
+int trap(vector<int> &height) {
+    int n = height.size();
+    int l = 0, lmax = 0, r = n - 1, rmax = 0;
+    int res = 0;
+    while (l < r) {
+        if (height[l] < height[r]) {
+            res += max(0, lmax - height[l]);
+            lmax = max(lmax, height[l++]);
+        } else {
+            res += max(0, rmax - height[r]);
+            rmax = max(rmax, height[r--]);
+        }
+    }
+    return res;
+}

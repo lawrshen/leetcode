@@ -30,6 +30,23 @@ ListNode *reverseList(ListNode *head) {
     return ptr;
 }
 
+// 234 https://leetcode.cn/problems/palindrome-linked-list/
+bool isPalindrome(ListNode *head) {
+    ListNode *slow = head, *fast = head;
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    ListNode *nxt = fast ? slow->next : slow;// fast != nullptr odd:even
+    ListNode *rhead = reverseList(nxt);
+    for (ListNode *ptr = head; ptr != slow; ptr = ptr->next, rhead = rhead->next) {
+        if (ptr->val != rhead->val) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // 2 https://leetcode.cn/problems/add-two-numbers/
 ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
     ListNode *dumpy = new ListNode();

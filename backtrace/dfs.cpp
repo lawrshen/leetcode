@@ -41,3 +41,20 @@ int findKthNumber(int n, int k) {
     }
     return cur;
 }
+
+int intCount(int n, int m) {
+    if (n == 1 || m == 1) {
+        return 1;
+    } else if (n < m) {
+        return intCount(n, n);
+    } else if (n == m) {
+        return intCount(n, n - 1);
+    } else {
+        return intCount(n, m - 1) + intCount(n - m, m);
+    }
+}
+
+// Integer division
+int IntegerDivision(int n) {
+    return intCount(n, n);
+}

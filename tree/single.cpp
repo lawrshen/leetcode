@@ -108,3 +108,18 @@ void flatten(TreeNode *root) {
     root->left = nullptr;
     last = root;
 }
+
+// 814 https://leetcode.cn/problems/binary-tree-pruning/
+// offer 47 https://leetcode.cn/problems/pOCWxh/
+TreeNode *pruneTree(TreeNode *root) {
+    if (root == nullptr)
+        return nullptr;
+    root->left = pruneTree(root->left);
+    root->right = pruneTree(root->right);
+    if (root->left == nullptr && root->right == nullptr) {
+        if (root->val == 0) {
+            root = nullptr;
+        }
+    }
+    return root;
+}

@@ -1,4 +1,5 @@
 #include <cstring>
+#include <set>
 #include <string>
 #include <vector>
 using namespace std;
@@ -50,4 +51,39 @@ int countSubstrings(string s) {
         }
     }
     return cnt;
+}
+
+// 72 https://leetcode.cn/problems/edit-distance/
+int minDistance(string word1, string word2) {
+    int m = word1.size(), n = word2.size();
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1));
+    for (int i = 1; i <= m; i++) {
+        dp[i][0] = i;
+    }
+    for (int j = 1; j <= n; j++) {
+        dp[0][j] = j;
+    }
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            dp[i][j] = min(dp[i - 1][j - 1] + (word1[i - 1] != word2[j - 1]), min(dp[i - 1][j], dp[i][j - 1]) + 1);
+        }
+    }
+    return dp[m][n];
+}
+
+// 139 https://leetcode.cn/problems/word-break/
+bool wordBreak(string s, vector<string> &wordDict) {
+    int n = s.size();
+    vector<bool> dp(n + 1);
+    set<string> wordDictSet(wordDict.begin(), wordDict.end());
+    dp[0] = true;
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (dp[j] && wordDictSet.count(s.substr(j, i - j))) {
+                dp[i] = true;
+                break;
+            }
+        }
+    }
+    return dp[n];
 }
