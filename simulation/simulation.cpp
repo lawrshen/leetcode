@@ -1,4 +1,7 @@
 #include <algorithm>
+#include <cmath>
+#include <queue>
+#include <stack>
 #include <string>
 #include <vector>
 using namespace std;
@@ -175,6 +178,7 @@ int longestMountain(vector<int> &arr) {
 
 // 151 https://leetcode.cn/problems/reverse-words-in-a-string/
 // offer 58 https://leetcode.cn/problems/fan-zhuan-dan-ci-shun-xu-lcof/
+// https://www.nowcoder.com/discuss/816927
 string reverseWords(string s) {
     string res = "";
     int i = s.size() - 1;
@@ -213,4 +217,121 @@ string convertToBase7(int num) {
     if (negative)
         res = "-" + res;
     return res;
+}
+
+// offer 58 https://leetcode.cn/problems/zuo-xuan-zhuan-zi-fu-chuan-lcof/
+string reverseLeftWords(string s, int n) {
+    n %= s.length();
+    return s.substr(n, s.length() - n) + s.substr(0, n);
+}
+
+// 950 https://leetcode.cn/problems/reveal-cards-in-increasing-order/
+vector<int> deckRevealedIncreasing(vector<int> &deck) {
+    sort(deck.begin(), deck.end(), [](int &a, int &b) {
+        return a > b;
+    });
+    deque<int> dq;
+    for (int &d : deck) {
+        if (dq.size() < 2) {
+            dq.push_front(d);
+        } else {
+            dq.push_front(dq.back());
+            dq.push_front(d);
+            dq.pop_back();
+        }
+    }
+    return vector<int>(dq.begin(), dq.end());
+}
+
+// interview-13 https://leetcode.cn/problems/ji-qi-ren-de-yun-dong-fan-wei-lcof/
+int getSum(int x) {
+    int res = 0;
+    while (x) {
+        res += x % 10;
+        x /= 10;
+    }
+    return res;
+}
+
+int movingCount(int m, int n, int k) {
+    int res = 1;
+    vector<vector<bool>> dp(m, vector<bool>(n));
+    dp[0][0] = k >= 0;
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if ((i == 0 && j == 0) || (getSum(i) + getSum(j) > k)) {
+                continue;
+            }
+            if (i > 0) {
+                dp[i][j] = dp[i][j] || dp[i - 1][j];
+            }
+            if (j > 0) {
+                dp[i][j] = dp[i][j] || dp[i][j - 1];
+            }
+            if (dp[i][j]) {
+                res++;
+            }
+        }
+    }
+    return res;
+}
+
+// offer 66 https://leetcode.cn/problems/gou-jian-cheng-ji-shu-zu-lcof/
+vector<int> constructArr(vector<int> &a) {
+    int n = a.size();
+    vector<int> l(n, 1), r(n, 1), b(n, 1);
+    for (int i = 1; i < n; i++) {
+        l[i] = l[i - 1] * a[i - 1];
+        r[n - 1 - i] = r[n - i] * a[n - i];
+    }
+    b[0] = r[0], b[n - 1] = l[n - 1];
+    for (int i = 1; i < n - 1; i++) {
+        b[i] = l[i] * r[i];
+    }
+    return b;
+}
+
+// offer 60 https://leetcode.cn/problems/nge-tou-zi-de-dian-shu-lcof/
+vector<double> dicesProbability(int n) {
+    vector<double> dp(6, 1.0 / 6.0);
+    for (int i = 2; i <= n; i++) {
+        // i dice range [1*i,6*i] len = 5*i+1
+        vector<double> tmp(5 * i + 1, 0);
+        for (int j = 0; j < dp.size(); j++) {
+            for (int k = 0; k < 6; k++) {
+                tmp[j + k] += dp[j] / 6.0;
+            }
+        }
+        dp = tmp;
+    }
+    return dp;
+}
+
+// 946 https://leetcode.cn/problems/validate-stack-sequences/
+// offer 31 https://leetcode.cn/problems/zhan-de-ya-ru-dan-chu-xu-lie-lcof/
+bool validateStackSequences(vector<int> &pushed, vector<int> &popped) {
+    stack<int> stk;
+    int i = 0;
+    for (int &num : pushed) {
+        stk.push(num);
+        while (!stk.empty() && stk.top() == popped[i]) {
+            stk.pop();
+            i++;
+        }
+    }
+    return stk.empty();
+}
+
+// 400 https://leetcode.cn/problems/nth-digit/
+// offer 44 https://leetcode.cn/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/
+int findNthDigit(int n) {
+    int len = 1;
+    long start = 1, cnt = 9;
+    while (cnt < n) {
+        n -= cnt;
+        len++;
+        start *= 10;
+        cnt = 9 * start * len;
+    }
+    return to_string(start + (n - 1) / len)[(n - 1) % len] - '0';
 }

@@ -37,7 +37,7 @@ bool isPalindrome(ListNode *head) {
         slow = slow->next;
         fast = fast->next->next;
     }
-    ListNode *nxt = fast ? slow->next : slow;// fast != nullptr odd:even
+    ListNode *nxt = fast ? slow->next : slow; // fast != nullptr odd:even
     ListNode *rhead = reverseList(nxt);
     for (ListNode *ptr = head; ptr != slow; ptr = ptr->next, rhead = rhead->next) {
         if (ptr->val != rhead->val) {
@@ -194,4 +194,47 @@ ListNode *rotateRight(ListNode *head, int k) {
     ListNode *res = cur->next;
     cur->next = nullptr;
     return res;
+}
+
+void copyNodes(Node *head) {
+    for (Node *ptr = head; ptr != nullptr; ptr = ptr->next) {
+        Node *tmp = new Node(ptr->val);
+        tmp->next = ptr->next;
+        ptr->next = tmp;
+        ptr = tmp;
+    }
+}
+
+void connectRandom(Node *head) {
+    for (Node *ptr = head; ptr != nullptr; ptr = ptr->next->next) {
+        if (ptr->random)
+            ptr->next->random = ptr->random->next;
+    }
+}
+
+Node *reconnectNodes(Node *head) {
+    Node *cur = nullptr, *res = nullptr;
+    Node *ptr = head;
+    if (ptr) {
+        cur = ptr->next;
+        ptr->next = cur->next;
+        ptr = cur->next;
+    }
+    res = cur;
+    while (ptr) {
+        cur->next = ptr->next;
+        cur = cur->next;
+        ptr->next = cur->next;
+        ptr = cur->next;
+    }
+    return res;
+}
+
+// offer 35 https://leetcode.cn/problems/fu-za-lian-biao-de-fu-zhi-lcof/
+Node *copyRandomList(Node *head) {
+    if (!head)
+        return {};
+    copyNodes(head);
+    connectRandom(head);
+    return reconnectNodes(head);
 }

@@ -90,6 +90,7 @@ void pathDfs(TreeNode *root, int sum, vector<int> &tmp, vector<vector<int>> &res
 }
 
 // 113 https://leetcode.cn/problems/path-sum-ii/
+// offer 34 https://leetcode.cn/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/
 vector<vector<int>> pathSum(TreeNode *root, int targetSum) {
     vector<int> tmp;
     vector<vector<int>> res;
