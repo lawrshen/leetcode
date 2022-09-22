@@ -335,3 +335,30 @@ int findNthDigit(int n) {
     }
     return to_string(start + (n - 1) / len)[(n - 1) % len] - '0';
 }
+
+// offer 45 https://leetcode.cn/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/
+string minNumber(vector<int> &nums) {
+    sort(nums.begin(), nums.end(), [](int &a, int &b) {
+        return to_string(a) + to_string(b) < to_string(b) + to_string(a);
+    });
+    string res = "";
+    for (int &n : nums) {
+        res += to_string(n);
+    }
+    return res;
+}
+
+// 667 https://leetcode.cn/problems/beautiful-arrangement-ii/
+vector<int> constructArray(int n, int k) {
+    vector<int> res;
+    for (int i = 1; i < n - k; i++) {
+        res.emplace_back(i);
+    }
+    for (int i = n - k, j = n; i <= j; i++, j--) {
+        res.emplace_back(i);
+        if (i != j) {
+            res.emplace_back(j);
+        }
+    }
+    return res;
+}

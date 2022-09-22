@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cstring>
 #include <set>
 #include <string>
@@ -86,4 +87,48 @@ bool wordBreak(string s, vector<string> &wordDict) {
         }
     }
     return dp[n];
+}
+
+// offer 46 https://leetcode.cn/problems/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-lcof/
+int translateNum(int num) {
+    string tmp = to_string(num);
+    int n = tmp.size();
+    vector<int> dp(n);
+    dp[0] = 1;
+    for (int i = 1; i < n; i++) {
+        dp[i] = dp[i - 1];
+        int n = (tmp[i - 1] - '0') * 10 + (tmp[i] - '0');
+        if (n > 9 && n < 26) {
+            if (i == 1)
+                dp[i]++;
+            else
+                dp[i] += dp[i - 2];
+        }
+    }
+    return dp[n - 1];
+}
+
+// 300 https://leetcode.cn/problems/longest-increasing-subsequence/
+int lengthOfLIS(vector<int> &nums) {
+}
+
+int rob(vector<int> &arr) {
+    int n = arr.size();
+    int first = arr[0], second = max(arr[0], arr[1]);
+    for (int i = 2; i < n; i++) {
+        int tmp = second;
+        second = max(arr[i] + first, second);
+        first = tmp;
+    }
+    return second;
+}
+
+// 740 https://leetcode.cn/problems/delete-and-earn/
+int deleteAndEarn(vector<int> &nums) {
+    int maxVal = *max_element(nums.begin(), nums.end());
+    vector<int> arr(maxVal + 1);
+    for (int num : nums) {
+        arr[num] += num;
+    }
+    return rob(arr);
 }

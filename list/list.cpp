@@ -238,3 +238,27 @@ Node *copyRandomList(Node *head) {
     connectRandom(head);
     return reconnectNodes(head);
 }
+
+// 02.05 https://leetcode.cn/problems/sum-lists-lcci/
+ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
+    ListNode *dummy = new ListNode(), *cur = dummy;
+    int carry = 0;
+    while (l1 || l2) {
+        if (l1 && l2) {
+            int val = l1->val + l2->val + carry;
+            carry = val % 10;
+            ListNode *node = new ListNode(val / 10);
+            cur->next = node;
+            cur = node;
+            l1 = l1->next;
+            l2 = l2->next;
+        } else if (l1) {
+            if(carry==0){
+                cur->next=l1;
+                break;
+            }
+            
+        }
+    }
+    return dummy->next;
+}
